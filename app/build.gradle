@@ -8,7 +8,10 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
+    dataBinding.enabled = true
     defaultConfig {
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.khiemle.wmovies"
         minSdkVersion 16
         targetSdkVersion 28

@@ -1,15 +1,11 @@
 package com.khiemle.wmovies.presentation.viewmodels
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.khiemle.wmovies.data.models.Movie
-import com.khiemle.wmovies.data.repositories.MovieRepository
-import com.khiemle.wmovies.data.repositories.MoviesListType
-import com.khiemle.wmovies.data.repositories.RequestStatus
-import com.khiemle.wmovies.data.repositories.Result
+import com.khiemle.wmovies.data.repositories.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -22,23 +18,23 @@ operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
     add(disposable)
 }
 
-class MoviesViewModel(retrofit: Retrofit, private val moviesListType: MoviesListType): ViewModel() {
+class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val moviesListType: MoviesListType): ViewModel() {
 
-    class NowPlayingFactory(private val retrofit: Retrofit) : ViewModelProvider.Factory {
+    class NowPlayingFactory(private val retrofit: Retrofit,private val appDatabase: AppDatabase?) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MoviesViewModel(retrofit, MoviesListType.NOW_PLAYING) as T
+            return MoviesViewModel(retrofit, appDatabase, MoviesListType.NOW_PLAYING) as T
         }
     }
-    class TopRatedFactory(private val retrofit: Retrofit) : ViewModelProvider.Factory {
+    class TopRatedFactory(private val retrofit: Retrofit, private val appDatabase: AppDatabase?) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MoviesViewModel(retrofit, MoviesListType.TOP_RATED) as T
+            return MoviesViewModel(retrofit, appDatabase, MoviesListType.TOP_RATED) as T
         }
     }
 
     val isLoading = ObservableField(false)
     val status = ObservableField(Result(RequestStatus.IDLE, null))
 
-    private val movieRepository = MovieRepository(retrofit)
+    private val movieRepository = MovieRepository(retrofit, appDatabase)
     var movies = MutableLiveData<List<Movie>>()
 
     fun loadedMoviesList() : Boolean {

@@ -1,5 +1,6 @@
 package com.khiemle.wmovies.presentation.viewmodels
 
+import com.khiemle.wmovies.data.repositories.AppDatabase
 import com.khiemle.wmovies.di.AppModule
 import com.khiemle.wmovies.di.NetModule
 import dagger.Module
@@ -11,11 +12,11 @@ import javax.inject.Singleton
 class MovieModule {
     @Provides
     @Singleton
-    fun getNowPlayingMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.NowPlayingFactory(retrofit)
+    fun getNowPlayingMoviesViewModelFactory(retrofit: Retrofit, appDatabase: AppDatabase?) = MoviesViewModel.NowPlayingFactory(retrofit, appDatabase)
 
     @Provides
     @Singleton
-    fun getTopRatedMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.TopRatedFactory(retrofit)
+    fun getTopRatedMoviesViewModelFactory(retrofit: Retrofit, appDatabase: AppDatabase?) = MoviesViewModel.TopRatedFactory(retrofit, appDatabase)
 
     @Provides
     @Singleton

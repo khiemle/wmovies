@@ -10,5 +10,5 @@ enum class MoviesListType {
 abstract class MovieDataSource {
     abstract fun getMovies(page: Int, moviesListType: MoviesListType): Observable<List<Movie>>
     abstract fun getMovie(id: Long): Observable<Movie>
-    abstract fun getCredits(id: Long): Observable<Credits>
+//    abstract fun getCredits(id: Long): Observable<Credits>
 }

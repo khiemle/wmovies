@@ -53,7 +53,7 @@ class MovieRemoteDataSource(retrofit: Retrofit) : MovieDataSource() {
         return movieAPI.getMovieDetails(id, API_KEY)
     }
 
-    override fun getCredits(id: Long): Observable<Credits> {
+    fun getCredits(id: Long): Observable<Credits> {
         return movieAPI.getMovieCredits(id, API_KEY)
     }
 }

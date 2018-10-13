@@ -19,12 +19,11 @@ import com.khiemle.wmovies.presentation.adapters.MoviesAdapter
 import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
-class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener {
-    override fun onItemClick(position: Int, id: Long) {
 
-    }
 
+class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentMoviesBinding
     private lateinit var adapter: MoviesAdapter
     @Inject lateinit var glide: RequestManager
@@ -49,19 +48,12 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener {
         binding.rvMovies.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
 
-        if (moviesViewModel.loadedMoviesList()) {
-            moviesViewModel.movies.value?.let {
-                adapter.submitList(it)
-                adapter.notifyDataSetChanged()
-            }
-        } else {
+        if (!moviesViewModel.loadedMoviesList()) {
             moviesViewModel.getMovies(1)
-            moviesViewModel.movies.observe(this, Observer {
-                it?.let {
-                    adapter.submitList(it)
-                    adapter.notifyDataSetChanged()
-                }
-            })
+        }
+        moviesViewModel.movies.value?.let {
+            adapter.submitList(it)
+            adapter.notifyDataSetChanged()
         }
 
         moviesViewModel.movies.observe(this, Observer {
@@ -71,6 +63,17 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener {
             }
         })
 
+        binding.swipeContainer.setOnRefreshListener(this)
+
+
         return binding.root
+    }
+
+    override fun onRefresh() {
+        moviesViewModel.getMovies(1)
+    }
+
+    override fun onItemClick(position: Int, id: Long) {
+
     }
 }

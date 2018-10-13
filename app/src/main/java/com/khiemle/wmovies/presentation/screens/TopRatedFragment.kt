@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
@@ -20,11 +21,7 @@ import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener {
-    override fun onItemClick(position: Int, id: Long) {
-
-    }
-
+class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentMoviesBinding
     private lateinit var adapter: MoviesAdapter
     @Inject lateinit var glide: RequestManager
@@ -54,7 +51,6 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener {
                 adapter.notifyDataSetChanged()
             }
         } else {
-            Log.d("=============", "need to load list")
             moviesViewModel.getMovies(1)
             moviesViewModel.movies.observe(this, Observer {
                 it?.let {
@@ -71,6 +67,16 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener {
             }
         })
 
+        binding.swipeContainer.setOnRefreshListener(this)
+
         return binding.root
+    }
+
+    override fun onRefresh() {
+        moviesViewModel.getMovies(1)
+    }
+
+    override fun onItemClick(position: Int, id: Long) {
+
     }
 }

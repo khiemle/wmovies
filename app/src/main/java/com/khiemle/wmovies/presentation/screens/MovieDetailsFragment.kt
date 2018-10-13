@@ -81,6 +81,10 @@ class MovieDetailsFragment: Fragment() {
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         if (activity is HomeActivity) {
             (activity as HomeActivity).showBottomNavigation(false)
         }

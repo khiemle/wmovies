@@ -2,6 +2,7 @@ package com.khiemle.wmovies.presentation.screens
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener {
                 adapter.notifyDataSetChanged()
             }
         } else {
+            Log.d("=============", "need to load list")
             moviesViewModel.getMovies(1)
             moviesViewModel.movies.observe(this, Observer {
                 it?.let {

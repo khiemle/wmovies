@@ -1,5 +1,6 @@
 package com.khiemle.wmovies.presentation.screens
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
+import com.khiemle.wmovies.data.repositories.RequestStatus
 import com.khiemle.wmovies.presentation.HomeActivity
 import com.khiemle.wmovies.presentation.adapters.MoviesAdapter
 import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
@@ -68,9 +71,28 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
             }
         })
 
+        moviesViewModel.status.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                moviesViewModel.status.get()?.let {
+                    if (it.status == RequestStatus.ERROR) {
+                        it.errorMessage?.let { it1 -> showError(it1) }
+                    }
+                    if (it.status != RequestStatus.LOADING) {
+                        binding.swipeContainer.isRefreshing = false
+                    }
+                }
+            }
+
+        })
+
         binding.swipeContainer.setOnRefreshListener(this)
 
         return binding.root
+    }
+
+    fun showError(error: String) {
+        val dialog = AlertDialog.Builder(activity).setTitle("Alert").setMessage(error).setPositiveButton("Ok") { _, _ -> }.create()
+        dialog.show()
     }
 
     override fun onRefresh() {

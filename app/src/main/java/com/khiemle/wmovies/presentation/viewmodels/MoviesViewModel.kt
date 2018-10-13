@@ -1,5 +1,6 @@
 package com.khiemle.wmovies.presentation.viewmodels
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.data.repositories.MovieRepository
 import com.khiemle.wmovies.data.repositories.MoviesListType
+import com.khiemle.wmovies.data.repositories.RequestStatus
+import com.khiemle.wmovies.data.repositories.Result
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -33,6 +36,7 @@ class MoviesViewModel(retrofit: Retrofit, private val moviesListType: MoviesList
     }
 
     val isLoading = ObservableField(false)
+    val status = ObservableField(Result(RequestStatus.IDLE, null))
 
     private val movieRepository = MovieRepository(retrofit)
     var movies = MutableLiveData<List<Movie>>()
@@ -47,6 +51,7 @@ class MoviesViewModel(retrofit: Retrofit, private val moviesListType: MoviesList
 
     fun getMovies(page: Int) {
         isLoading.set(true)
+        status.set(Result(RequestStatus.LOADING, null))
         compositeDisposable += movieRepository.getMovies(page, moviesListType)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,11 +63,12 @@ class MoviesViewModel(retrofit: Retrofit, private val moviesListType: MoviesList
                     override fun onNext(result: List<Movie>) {
                         result?.let {
                             movies.value = it
+                            status.set(Result(RequestStatus.SUCCESSFUL, null))
                         }
                     }
 
                     override fun onError(e: Throwable) {
-
+                        status.set((Result(RequestStatus.ERROR, e.message)))
                     }
 
                 })

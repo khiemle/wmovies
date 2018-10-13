@@ -28,7 +28,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener {
     private lateinit var binding: FragmentMoviesBinding
     private lateinit var adapter: MoviesAdapter
     @Inject lateinit var glide: RequestManager
-    @Inject lateinit var moviesModelFactory: MoviesViewModel.Factory
+    @Inject lateinit var moviesModelFactory: MoviesViewModel.TopRatedFactory
 
     private val moviesViewModel by lazy(mode = LazyThreadSafetyMode.NONE) {
         ViewModelProviders.of(this, moviesModelFactory).get(MoviesViewModel::class.java)

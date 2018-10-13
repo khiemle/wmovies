@@ -11,5 +11,9 @@ import javax.inject.Singleton
 class MovieModule {
     @Provides
     @Singleton
-    fun getMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.Factory(retrofit)
+    fun getNowPlayingMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.NowPlayingFactory(retrofit)
+
+    @Provides
+    @Singleton
+    fun getTopRatedMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.TopRatedFactory(retrofit)
 }

@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 class MovieRepository(retrofit: Retrofit) {
     private val movieRemoteDataSource = MovieRemoteDataSource(retrofit)
 
-    fun getMovies(page: Int) : Observable<List<Movie>> {
-        return movieRemoteDataSource.getMovies(page)
+    fun getMovies(page: Int, moviesListType: MoviesListType) : Observable<List<Movie>> {
+        return movieRemoteDataSource.getMovies(page, moviesListType)
     }
 }

@@ -1,5 +1,7 @@
 package com.khiemle.wmovies.data.repositories
 
+import com.khiemle.wmovies.data.models.Cast
+import com.khiemle.wmovies.data.models.Crew
 import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -14,13 +16,17 @@ interface MovieAPI {
     @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MoviesResponse>
 
-
     @GET("movie/{movie_id}")
     fun getMovieDetails(@Path("movie_id") id: Long, @Query("api_key") apiKey: String):Observable<Movie>
+
+    @GET("movie/{movie_id}/credits")
+    fun getMovieCredits(@Path("movie_id") id: Long, @Query("api_key") apiKey: String):Observable<Credits>
 
 }
 
 data class MoviesResponse(val results: List<Movie>)
+
+data class Credits(val id: Long?, val cast: List<Cast>?=null, val crew: List<Crew>?=null)
 
 
 class MovieRemoteDataSource(retrofit: Retrofit) : MovieDataSource() {
@@ -47,4 +53,7 @@ class MovieRemoteDataSource(retrofit: Retrofit) : MovieDataSource() {
         return movieAPI.getMovieDetails(id, API_KEY)
     }
 
+    override fun getCredits(id: Long): Observable<Credits> {
+        return movieAPI.getMovieCredits(id, API_KEY)
+    }
 }

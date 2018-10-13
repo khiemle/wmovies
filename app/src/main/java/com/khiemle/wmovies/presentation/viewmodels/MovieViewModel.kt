@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.khiemle.wmovies.data.models.Movie
+import com.khiemle.wmovies.data.repositories.Credits
 import com.khiemle.wmovies.data.repositories.MovieRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,6 +24,7 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
 
     private val movieRepository = MovieRepository(retrofit)
     var movie = MutableLiveData<Movie>()
+    var credits = MutableLiveData<Credits>()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -67,9 +69,32 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
         }
     }
 
+    fun getCredits(id: Long) {
+        compositeDisposable += movieRepository.getMovieCredits(id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<Credits>() {
+                    override fun onComplete() {
+                        isLoading.set(false)
+                    }
+
+                    override fun onNext(result: Credits) {
+                        result?.let {
+                            credits.value = it
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+
+                    }
+
+
+                })
+
+    }
+
     fun getMovie(id: Long) {
         isLoading.set(true)
-
         compositeDisposable += movieRepository.getMovieDetails(id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -81,6 +106,7 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
                     override fun onNext(result: Movie) {
                         result?.let {
                             movie.value = it
+                            getCredits(id)
                         }
                     }
 

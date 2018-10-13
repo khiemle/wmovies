@@ -14,4 +14,8 @@ class MovieRepository(retrofit: Retrofit) {
     fun getMovieDetails(id: Long) : Observable<Movie> {
         return movieRemoteDataSource.getMovie(id)
     }
+
+    fun getMovieCredits(id: Long): Observable<Credits> {
+        return movieRemoteDataSource.getCredits(id)
+    }
 }

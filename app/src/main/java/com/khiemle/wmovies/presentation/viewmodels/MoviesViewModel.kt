@@ -1,9 +1,10 @@
 package com.khiemle.wmovies.presentation.viewmodels
 
 import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.data.repositories.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,38 +36,45 @@ class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val
     val status = ObservableField(Result(RequestStatus.IDLE, null))
 
     private val movieRepository = MovieRepository(retrofit, appDatabase)
-    var movies = MutableLiveData<List<Movie>>()
+    lateinit var movies : LiveData<PagedList<Movie>>
 
-    fun loadedMoviesList() : Boolean {
-        movies.value?.isNotEmpty()?.let {
-            return it
-        }
-        return false
-    }
     private val compositeDisposable = CompositeDisposable()
 
-    fun getMovies(page: Int) {
+    init {
+        movieRepository.getMoviesWithPaging(moviesListType, object : PagedList.BoundaryCallback<Movie>() {
+            override fun onZeroItemsLoaded() {
+                isLoading.get()?.let {
+                    if (it) return
+                }
+                loadMoreMovies(1)
+            }
+            override fun onItemAtEndLoaded(itemAtEnd: Movie) {
+                loadMoreMovies(itemAtEnd.page+1)
+            }
+        })?.let {
+            movies = it
+        }
+    }
+
+    fun loadMoreMovies(page: Int) {
         isLoading.set(true)
         status.set(Result(RequestStatus.LOADING, null))
         compositeDisposable += movieRepository.getMovies(page, moviesListType)
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribeWith(object : DisposableObserver<List<Movie>>() {
                     override fun onComplete() {
                         isLoading.set(false)
+                        status.set(Result(RequestStatus.SUCCESSFUL, null))
                     }
-
                     override fun onNext(result: List<Movie>) {
                         result?.let {
-                            movies.value = it
                             status.set(Result(RequestStatus.SUCCESSFUL, null))
                         }
                     }
-
                     override fun onError(e: Throwable) {
                         status.set((Result(RequestStatus.ERROR, e.message)))
                     }
-
                 })
     }
 
@@ -77,4 +85,14 @@ class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val
         }
     }
 
+    fun clearAndReload(type: MoviesListType) {
+        compositeDisposable += movieRepository.clearLocalDataSource(moviesListType)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<Int>() {
+                    override fun onComplete() {}
+                    override fun onNext(result: Int) {}
+                    override fun onError(e: Throwable) {}
+        })
+    }
 }

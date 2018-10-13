@@ -23,12 +23,13 @@ data class Movie (
         @SerializedName("vote_count") var voteCount: Long? = null,
         @Ignore var genres: List<Genre>? = null,
         var runtime: Int?= null,
-        var type: Int = 0
+        var type: Int = 0,
+        var page: Int = 1
 ) {
     companion object {
         const val NOW_PLAYING = 0
         const val TOP_RATED = 1
     }
 
-    constructor():this(null, null, null,0, null, null, null, null, null, null, null,null,null,null, null, null, 0)
+    constructor():this(null, null, null,0, null, null, null, null, null, null, null,null,null,null, null, null, 0, 1)
 }

@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
+import com.khiemle.wmovies.data.repositories.MoviesListType
 import com.khiemle.wmovies.data.repositories.RequestStatus
 import com.khiemle.wmovies.presentation.HomeActivity
 import com.khiemle.wmovies.presentation.adapters.MoviesAdapter
@@ -49,20 +50,6 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
         binding.rvMovies.adapter = adapter
         binding.rvMovies.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
-        if (moviesViewModel.loadedMoviesList()) {
-            moviesViewModel.movies.value?.let {
-                adapter.submitList(it)
-                adapter.notifyDataSetChanged()
-            }
-        } else {
-            moviesViewModel.getMovies(1)
-            moviesViewModel.movies.observe(this, Observer {
-                it?.let {
-                    adapter.submitList(it)
-                    adapter.notifyDataSetChanged()
-                }
-            })
-        }
 
         moviesViewModel.movies.observe(this, Observer {
             it?.let {
@@ -70,6 +57,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
                 adapter.notifyDataSetChanged()
             }
         })
+
 
         moviesViewModel.status.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -96,7 +84,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
     }
 
     override fun onRefresh() {
-        moviesViewModel.getMovies(1)
+        moviesViewModel.clearAndReload(MoviesListType.TOP_RATED)
     }
 
     override fun onItemClick(position: Int, id: Long) {

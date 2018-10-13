@@ -2,14 +2,14 @@ package com.khiemle.wmovies.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.databinding.RvMovieItemBinding
 
 class MoviesAdapter(private val glide : RequestManager?,
-                                 private var listener: OnItemClickListener) : ListAdapter<Movie, MoviesAdapter.ViewHolder>(
+                                 private var listener: OnItemClickListener) : PagedListAdapter<Movie, MoviesAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Movie>() {
             override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
                 return oldItem.id == newItem.id
@@ -26,16 +26,19 @@ class MoviesAdapter(private val glide : RequestManager?,
         return ViewHolder(binding, glide)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position), listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val movie = getItem(position);
+        holder.bind(movie, listener)
+    }
 
     class ViewHolder(private var binding: RvMovieItemBinding, private var glide: RequestManager?) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Movie, listener: OnItemClickListener?) {
+        fun bind(movie: Movie?, listener: OnItemClickListener?) {
             binding.movieModel = movie
             binding.executePendingBindings()
-            val imageUrl = "https://image.tmdb.org/t/p/w300${movie.posterPath}"
+            val imageUrl = "https://image.tmdb.org/t/p/w300${movie?.posterPath}"
             glide?.load(imageUrl)?.into(binding.imgPoster)
             if (listener != null) {
-                binding.root.setOnClickListener { _ -> movie.id?.let { listener.onItemClick(layoutPosition, it) } }
+                binding.root.setOnClickListener { _ -> movie?.id?.let { listener.onItemClick(layoutPosition, it) } }
             }
 
         }

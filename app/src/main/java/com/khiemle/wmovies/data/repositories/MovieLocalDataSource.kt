@@ -1,6 +1,9 @@
 package com.khiemle.wmovies.data.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.room.*
 import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Flowable
@@ -22,6 +25,12 @@ interface MovieDAO {
 
     @Query("SELECT * FROM movies WHERE type LIKE :type ORDER BY voteAverage DESC, popularity DESC")
     fun getObservableTopRatedMovies(type: Int): Observable<List<Movie>>
+
+    @Query("SELECT * FROM movies WHERE type LIKE :type ORDER BY popularity DESC")
+    fun getFactoryNowPlayingMovies(type: Int): DataSource.Factory<Int, Movie>
+
+    @Query("SELECT * FROM movies WHERE type LIKE :type ORDER BY voteAverage DESC, popularity DESC")
+    fun getFactoryTopRatedMovies(type: Int): DataSource.Factory<Int, Movie>
 
     @Query("SELECT * FROM movies WHERE id LIKE :id LIMIT 1")
     fun findById(id: Long): Observable<Movie>
@@ -60,6 +69,28 @@ class MovieLocalDataSource(appDatabase: AppDatabase?) : MovieDataSource() {
 
     fun insertAll(movies: List<Movie>) {
         movieDAO?.insertAll(movies)
+    }
+
+    fun getMoviesWithPaging(pageSize: Int,moviesListType: MoviesListType, boundaryCallback: PagedList.BoundaryCallback<Movie>) : LiveData<PagedList<Movie>>? {
+        val factory: DataSource.Factory<Int, Movie>? = if (moviesListType == MoviesListType.NOW_PLAYING)
+            movieDAO?.getFactoryNowPlayingMovies(Movie.NOW_PLAYING) else movieDAO?.getFactoryTopRatedMovies(Movie.TOP_RATED)
+
+        return factory?.let {
+            val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(true)
+                    .setInitialLoadSizeHint(20)
+                    .setPageSize(pageSize)
+                    .setPrefetchDistance(3)
+                    .build()
+            LivePagedListBuilder(it, config).setBoundaryCallback(boundaryCallback).build()
+        }
+    }
+
+    fun clearAll(type: MoviesListType) {
+        if (type == MoviesListType.NOW_PLAYING)
+            movieDAO?.deleteAll(Movie.NOW_PLAYING)
+        else
+            movieDAO?.deleteAll(Movie.TOP_RATED)
     }
 
 }

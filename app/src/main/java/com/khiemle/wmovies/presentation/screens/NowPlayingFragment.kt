@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.R
+import com.khiemle.wmovies.data.repositories.MoviesListType
 import com.khiemle.wmovies.data.repositories.RequestStatus
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.presentation.HomeActivity
@@ -50,14 +51,6 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRe
         binding.rvMovies.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
 
-        if (!moviesViewModel.loadedMoviesList()) {
-            moviesViewModel.getMovies(1)
-        }
-        moviesViewModel.movies.value?.let {
-            adapter.submitList(it)
-            adapter.notifyDataSetChanged()
-        }
-
         moviesViewModel.movies.observe(this, Observer {
             it?.let {
                 adapter.submitList(it)
@@ -89,7 +82,7 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRe
 
 
     override fun onRefresh() {
-        moviesViewModel.getMovies(1)
+        moviesViewModel.clearAndReload(MoviesListType.NOW_PLAYING)
     }
 
     override fun onItemClick(position: Int, id: Long) {

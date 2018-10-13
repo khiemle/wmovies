@@ -16,5 +16,7 @@ data class Movie (
         val title: String? = null,
         val video: Boolean? = null,
         @SerializedName("vote_average") val voteAverage: Double? = null,
-        @SerializedName("vote_count") val voteCount: Long? = null
+        @SerializedName("vote_count") val voteCount: Long? = null,
+        val genres: List<Genre>? = null,
+        val runtime: Int?= null
 )

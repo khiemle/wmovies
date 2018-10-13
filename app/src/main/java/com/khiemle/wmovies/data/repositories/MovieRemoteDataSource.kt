@@ -4,6 +4,7 @@ import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieAPI {
@@ -12,6 +13,11 @@ interface MovieAPI {
 
     @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MoviesResponse>
+
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetails(@Path("movie_id") id: Long, @Query("api_key") apiKey: String):Observable<Movie>
+
 }
 
 data class MoviesResponse(val results: List<Movie>)
@@ -38,7 +44,7 @@ class MovieRemoteDataSource(retrofit: Retrofit) : MovieDataSource() {
     }
 
     override fun getMovie(id: Long): Observable<Movie> {
-        return Observable.just(Movie())
+        return movieAPI.getMovieDetails(id, API_KEY)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.khiemle.wmovies.di
 
+import com.khiemle.wmovies.presentation.screens.MovieDetailsFragment
 import com.khiemle.wmovies.presentation.screens.NowPlayingFragment
 import com.khiemle.wmovies.presentation.screens.TopRatedFragment
 import dagger.Module
@@ -14,4 +15,9 @@ abstract class FragmentsModule {
     @FragmentScope
     @ContributesAndroidInjector
     internal abstract fun topRatedFragment() : TopRatedFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    internal abstract fun movieDetailsFragment() : MovieDetailsFragment
+
 }

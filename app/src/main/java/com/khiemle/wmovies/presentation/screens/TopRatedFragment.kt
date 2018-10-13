@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
+import com.khiemle.wmovies.presentation.HomeActivity
 import com.khiemle.wmovies.presentation.adapters.MoviesAdapter
 import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -77,6 +78,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
     }
 
     override fun onItemClick(position: Int, id: Long) {
-
-    }
-}
+        if (activity is HomeActivity) {
+            (activity as HomeActivity).openMovieDetails(id)
+        }
+    }}

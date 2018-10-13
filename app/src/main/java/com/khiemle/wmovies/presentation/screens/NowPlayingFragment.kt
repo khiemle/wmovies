@@ -20,7 +20,7 @@ import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-
+import com.khiemle.wmovies.presentation.HomeActivity
 
 
 class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -74,6 +74,8 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRe
     }
 
     override fun onItemClick(position: Int, id: Long) {
-
+        if (activity is HomeActivity) {
+            (activity as HomeActivity).openMovieDetails(id)
+        }
     }
 }

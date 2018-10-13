@@ -10,4 +10,8 @@ class MovieRepository(retrofit: Retrofit) {
     fun getMovies(page: Int, moviesListType: MoviesListType) : Observable<List<Movie>> {
         return movieRemoteDataSource.getMovies(page, moviesListType)
     }
+
+    fun getMovieDetails(id: Long) : Observable<Movie> {
+        return movieRemoteDataSource.getMovie(id)
+    }
 }

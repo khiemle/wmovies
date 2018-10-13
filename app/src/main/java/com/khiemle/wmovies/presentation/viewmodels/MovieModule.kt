@@ -16,4 +16,9 @@ class MovieModule {
     @Provides
     @Singleton
     fun getTopRatedMoviesViewModelFactory(retrofit: Retrofit) = MoviesViewModel.TopRatedFactory(retrofit)
+
+    @Provides
+    @Singleton
+    fun getMovieViewModelFactory(retrofit: Retrofit) = MovieViewModel.Factory(retrofit)
+
 }

@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/navigation_now_playing"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_baseline_movie_24px"
         android:title="@string/title_now_playing" />
 
     <item
         android:id="@+id/navigation_top_rated"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_baseline_star_24px"
         android:title="@string/title_top_rated" />
 
 </menu>

@@ -9,9 +9,9 @@ data class Cast(
         @SerializedName("credit_id")
         val creditId: String? = null,
         val gender: Int? = null,
-        val id: Long? = null,
-        val name: String? = null,
+        override val id: Long? = null,
+        override val name: String? = null,
         val order: Int? = null,
         @SerializedName("profile_path")
-        val profilePath: String? = null
-)
+        override val profilePath: String? = null
+) : Contributor(id, name, character, profilePath)

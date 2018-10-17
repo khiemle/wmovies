@@ -66,11 +66,11 @@ class HomeActivity : AppCompatActivity() {
         when (showed) {
             true -> {
                 navigation.visibility = View.VISIBLE
-                supportActionBar?.let { it.setDisplayHomeAsUpEnabled(false) }
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             false -> {
                 navigation.visibility = View.GONE
-                supportActionBar?.let { it.setDisplayHomeAsUpEnabled(true) }
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         }
     }

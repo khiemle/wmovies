@@ -2,6 +2,7 @@ package com.khiemle.wmovies.presentation.screens
 
 import android.app.AlertDialog
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
     private lateinit var adapter: MoviesAdapter
     @Inject lateinit var glide: RequestManager
     @Inject lateinit var moviesModelFactory: MoviesViewModel.TopRatedFactory
+    @Inject lateinit var connectivityManager: ConnectivityManager
 
     private val moviesViewModel by lazy(mode = LazyThreadSafetyMode.NONE) {
         ViewModelProviders.of(this, moviesModelFactory).get(MoviesViewModel::class.java)
@@ -79,12 +81,18 @@ class TopRatedFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRefr
     }
 
     fun showError(error: String) {
-        val dialog = AlertDialog.Builder(activity).setTitle("Alert").setMessage(error).setPositiveButton("Ok") { _, _ -> }.create()
-        dialog.show()
+        activity?.runOnUiThread {
+            val dialog = AlertDialog.Builder(activity).setTitle("Alert").setMessage(error).setPositiveButton("Ok") { _, _ -> }.create()
+            dialog.show()
+        }
     }
 
     override fun onRefresh() {
-        moviesViewModel.clearAndReload(MoviesListType.TOP_RATED)
+        if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected) {
+            moviesViewModel.clearAndReload(MoviesListType.TOP_RATED)
+        } else {
+            binding.swipeContainer.isRefreshing = false
+        }
     }
 
     override fun onItemClick(position: Int, id: Long) {

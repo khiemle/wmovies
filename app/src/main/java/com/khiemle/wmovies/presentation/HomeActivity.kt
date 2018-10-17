@@ -1,5 +1,7 @@
 package com.khiemle.wmovies.presentation
 
+import android.app.AlertDialog
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -8,9 +10,13 @@ import com.khiemle.wmovies.R
 import com.khiemle.wmovies.presentation.screens.MovieDetailsFragment
 import com.khiemle.wmovies.presentation.screens.NowPlayingFragment
 import com.khiemle.wmovies.presentation.screens.TopRatedFragment
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_home.*
+import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
+
+    @Inject lateinit var connectivityManager: ConnectivityManager
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -35,6 +41,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -42,8 +49,27 @@ class HomeActivity : AppCompatActivity() {
         existsFragment?.let {
             return
         }
-        openNowPlaying()
+        if (isConnected()) {
+            openNowPlaying()
+        } else {
+            showNetworkError()
+        }
 
+    }
+
+
+    fun showNetworkError() {
+        runOnUiThread {
+            val dialog = AlertDialog.Builder(this).setTitle("Alert").setMessage("Internet is'nt available").setPositiveButton("Retry") { _, _ ->
+                if (isConnected()) {
+                    openNowPlaying()
+                } else {
+                    showNetworkError()
+                }
+            }
+            .setNegativeButton("Cancel") { _,_ -> }.create()
+            dialog.show()
+        }
     }
 
     private fun openNowPlaying() {
@@ -88,5 +114,12 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         super.onBackPressed()
+    }
+
+    fun isConnected() : Boolean {
+        if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected) {
+            return true;
+        }
+        return false
     }
 }

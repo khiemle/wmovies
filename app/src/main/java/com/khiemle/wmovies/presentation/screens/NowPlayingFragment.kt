@@ -65,7 +65,9 @@ class NowPlayingFragment: Fragment(), MoviesAdapter.OnItemClickListener, SwipeRe
                         it.errorMessage?.let { it1 -> showError(it1) }
                     }
                     if (it.status != RequestStatus.LOADING) {
-                        binding.swipeContainer.isRefreshing = false
+                        activity?.runOnUiThread {
+                            binding.swipeContainer.isRefreshing = false
+                        }
                     }
                 }
             }

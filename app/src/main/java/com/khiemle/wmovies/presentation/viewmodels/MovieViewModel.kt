@@ -45,10 +45,14 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
 
         val genres = movie.value?.genres?.let {
             var result = ""
-            it.forEach {
-                result = "$result, ${it.name}"
+            if (it.isNotEmpty()) {
+                it.forEach {
+                    result = "$result, ${it.name}"
+                }
+                return@let "| ${result.substring(1)}"
+            } else {
+                return@let ""
             }
-            return@let result.substring(1)
         }
 
         val runtime = movie.value?.runtime?.let {
@@ -60,7 +64,7 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
         }
 
 
-        return "$voteAverage | $runtime | $genres"
+        return "$voteAverage | $runtime $genres"
     }
 
     fun getTitleWithReleasedYear() : String? {

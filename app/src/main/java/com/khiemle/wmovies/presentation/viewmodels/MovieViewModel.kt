@@ -69,7 +69,7 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
 
     fun getTitleWithReleasedYear() : String? {
         return movie.value?.let {
-            return@let "${it.title} ( ${it.releaseDate?.substring(0, 4)} )"
+            return@let "${it.title} (${it.releaseDate?.substring(0, 4)})"
         }
     }
 

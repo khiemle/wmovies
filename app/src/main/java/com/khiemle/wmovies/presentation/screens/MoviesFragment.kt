@@ -21,6 +21,7 @@ import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
 import com.khiemle.wmovies.data.repositories.MoviesListType
 import com.khiemle.wmovies.data.repositories.RequestStatus
+import com.khiemle.wmovies.domains.ConfigurationDomain
 import com.khiemle.wmovies.presentation.HomeActivity
 import com.khiemle.wmovies.presentation.adapters.MoviesAdapter
 import com.khiemle.wmovies.presentation.viewmodels.MoviesViewModel
@@ -32,6 +33,7 @@ abstract class MoviesFragment: Fragment(), MoviesAdapter.OnItemClickListener, Sw
     private lateinit var adapter: MoviesAdapter
     @Inject lateinit var glide: RequestManager
     @Inject lateinit var connectivityManager: ConnectivityManager
+    @Inject lateinit var configurationDomain: ConfigurationDomain
 
     private val moviesViewModel by lazy(mode = LazyThreadSafetyMode.NONE) {
         createViewModel()
@@ -48,7 +50,7 @@ abstract class MoviesFragment: Fragment(), MoviesAdapter.OnItemClickListener, Sw
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies, container, false)
         binding.moviesViewModel = moviesViewModel
-        adapter = MoviesAdapter(glide, this)
+        adapter = MoviesAdapter(glide, this, configurationDomain)
         binding.rvMovies.layoutManager= LinearLayoutManager(context)
         binding.rvMovies.adapter = adapter
         binding.rvMovies.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))

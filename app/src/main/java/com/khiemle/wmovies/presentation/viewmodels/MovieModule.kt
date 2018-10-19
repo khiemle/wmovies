@@ -3,6 +3,7 @@ package com.khiemle.wmovies.presentation.viewmodels
 import com.khiemle.wmovies.data.repositories.AppDatabase
 import com.khiemle.wmovies.di.AppModule
 import com.khiemle.wmovies.di.NetModule
+import com.khiemle.wmovies.domains.ConfigurationDomain
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -20,6 +21,6 @@ class MovieModule {
 
     @Provides
     @Singleton
-    fun getMovieViewModelFactory(retrofit: Retrofit) = MovieViewModel.Factory(retrofit)
+    fun getMovieViewModelFactory(retrofit: Retrofit, configurationDomain: ConfigurationDomain) = MovieViewModel.Factory(retrofit, configurationDomain)
 
 }

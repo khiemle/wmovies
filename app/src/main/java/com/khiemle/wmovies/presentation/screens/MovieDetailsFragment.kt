@@ -55,7 +55,7 @@ class MovieDetailsFragment: Fragment() {
                 it?.let {
                     val listCast = it.cast?.filterIndexed { index, _ -> index in 0..3 }
                     listCast?.let {
-                        adapterCasts = CastsAdapter(glide)
+                        adapterCasts = CastsAdapter(glide, movieViewModel.configurationDomain)
                         adapterCasts.submitList(it)
                         binding.rvCasts.layoutManager= LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                         binding.rvCasts.adapter = adapterCasts

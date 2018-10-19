@@ -2,6 +2,7 @@ package com.khiemle.wmovies.data.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import com.khiemle.wmovies.data.models.Configuration
 import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -46,4 +47,7 @@ class MovieRepository(retrofit: Retrofit, appDatabase: AppDatabase? = null) {
         }
     }
 
+    fun getConfigurations() : Observable<Configuration> {
+        return movieRemoteDataSource.getConfigurations()
+    }
 }

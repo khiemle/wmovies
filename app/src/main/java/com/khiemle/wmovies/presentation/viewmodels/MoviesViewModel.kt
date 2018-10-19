@@ -7,17 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.data.repositories.*
+import com.khiemle.wmovies.utils.plusAssign
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 
-
-operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
-    add(disposable)
-}
 
 class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val moviesListType: MoviesListType): ViewModel() {
 

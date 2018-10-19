@@ -7,16 +7,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.data.repositories.Credits
 import com.khiemle.wmovies.data.repositories.MovieRepository
+import com.khiemle.wmovies.domains.ConfigurationDomain
+import com.khiemle.wmovies.utils.plusAssign
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 
-class MovieViewModel(retrofit: Retrofit): ViewModel() {
-    class Factory(val retrofit: Retrofit) : ViewModelProvider.Factory {
+class MovieViewModel(retrofit: Retrofit, val configurationDomain: ConfigurationDomain): ViewModel() {
+    class Factory(val retrofit: Retrofit, private val configurationDomain: ConfigurationDomain) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MovieViewModel(retrofit) as T
+            return MovieViewModel(retrofit, configurationDomain) as T
         }
     }
 
@@ -30,7 +32,7 @@ class MovieViewModel(retrofit: Retrofit): ViewModel() {
 
     fun getImageCoverUrl() : String? {
         return movie.value?.let {
-            return@let "https://image.tmdb.org/t/p/w500${it.backdropPath}"
+            return@let "${configurationDomain.getBaseUrl()}${configurationDomain.getBackdropWidthQuality(1)}${it.backdropPath}"
         }
     }
 

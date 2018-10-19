@@ -1,6 +1,7 @@
 package com.khiemle.wmovies.data.repositories
 
 import com.khiemle.wmovies.data.models.Cast
+import com.khiemle.wmovies.data.models.Configuration
 import com.khiemle.wmovies.data.models.Crew
 import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Observable
@@ -21,6 +22,9 @@ interface MovieAPI {
 
     @GET("movie/{movie_id}/credits")
     fun getMovieCredits(@Path("movie_id") id: Long, @Query("api_key") apiKey: String):Observable<Credits>
+
+    @GET("configuration")
+    fun getImagesConfiguration(@Query("api_key") apiKey: String):Observable<Configuration>
 
 }
 
@@ -55,5 +59,9 @@ class MovieRemoteDataSource(retrofit: Retrofit) : MovieDataSource() {
 
     fun getCredits(id: Long): Observable<Credits> {
         return movieAPI.getMovieCredits(id, API_KEY)
+    }
+
+    fun getConfigurations() : Observable<Configuration> {
+        return movieAPI.getImagesConfiguration(MovieRemoteDataSource.API_KEY)
     }
 }

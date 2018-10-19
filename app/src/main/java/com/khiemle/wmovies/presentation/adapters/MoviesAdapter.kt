@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.data.models.Movie
 import com.khiemle.wmovies.databinding.RvMovieItemBinding
+import com.khiemle.wmovies.domains.ConfigurationDomain
 
 class MoviesAdapter(private val glide : RequestManager?,
-                                 private var listener: OnItemClickListener) : PagedListAdapter<Movie, MoviesAdapter.ViewHolder>(
+                                 private var listener: OnItemClickListener,private val configurationDomain: ConfigurationDomain?) : PagedListAdapter<Movie, MoviesAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Movie>() {
             override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
                 return oldItem.id == newItem.id
@@ -23,7 +24,7 @@ class MoviesAdapter(private val glide : RequestManager?,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = RvMovieItemBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding, glide)
+        return ViewHolder(binding, glide, configurationDomain)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -31,11 +32,11 @@ class MoviesAdapter(private val glide : RequestManager?,
         holder.bind(movie, listener)
     }
 
-    class ViewHolder(private var binding: RvMovieItemBinding, private var glide: RequestManager?) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private var binding: RvMovieItemBinding, private var glide: RequestManager?, private val configurationDomain: ConfigurationDomain?) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie?, listener: OnItemClickListener?) {
             binding.movieModel = movie
             binding.executePendingBindings()
-            val imageUrl = "https://image.tmdb.org/t/p/w300${movie?.posterPath}"
+            val imageUrl = "${configurationDomain?.getBaseUrl()}${configurationDomain?.getPosterWidthQuality(4)}${movie?.posterPath}"
             glide?.load(imageUrl)?.into(binding.imgPoster)
             if (listener != null) {
                 binding.root.setOnClickListener { _ -> movie?.id?.let { listener.onItemClick(layoutPosition, it) } }

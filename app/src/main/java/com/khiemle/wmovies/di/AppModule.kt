@@ -5,8 +5,10 @@ import android.net.ConnectivityManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.data.repositories.AppDatabase
+import com.khiemle.wmovies.domains.ConfigurationDomain
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -30,5 +32,11 @@ class AppModule(private val applicationContext: Context) {
         return AppDatabase.buildDatabase(applicationContext)
     }
 
+
+    @Provides
+    @Singleton
+    fun getConfigurationDomain(retrofit: Retrofit, appDatabase: AppDatabase?) : ConfigurationDomain {
+        return ConfigurationDomain(retrofit, appDatabase)
+    }
 
 }

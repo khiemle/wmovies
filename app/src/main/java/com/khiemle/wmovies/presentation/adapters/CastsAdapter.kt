@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.khiemle.wmovies.R
 import com.khiemle.wmovies.data.models.Cast
 import com.khiemle.wmovies.databinding.RvCastItemBinding
 import com.khiemle.wmovies.domains.ConfigurationDomain
@@ -35,7 +37,17 @@ class CastsAdapter(private val glide : RequestManager?, private val configuratio
             binding.cast = cast
             binding.executePendingBindings()
             val imageUrl = "${configurationDomain.getBaseUrl()}${configurationDomain.getProfileWidthQuality(1)}${cast.profilePath}"
-            glide?.load(imageUrl)?.apply(RequestOptions.circleCropTransform())?.into(binding.imgCast)
+
+            val options = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.unknownimg)
+                    .error(R.drawable.unknownimg)
+                    .priority(Priority.HIGH)
+
+            if (cast.profilePath.isNullOrBlank()) {
+                glide?.load(R.drawable.unknownimg)?.apply(options)?.into(binding.imgCast)
+            } else {
+                glide?.load(imageUrl)?.apply(options)?.into(binding.imgCast)
+            }
         }
     }
 }

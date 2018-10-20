@@ -75,6 +75,12 @@ class MovieDetailsFragment: Fragment() {
             })
         }
 
+        binding.tvSeeAll.setOnClickListener {
+            if (activity is HomeActivity) {
+                movieViewModel.movie.value?.id?.let { movieId -> (activity as HomeActivity).openListContributors(movieId) }
+            }
+        }
+
         return binding.root
     }
 

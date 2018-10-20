@@ -7,6 +7,7 @@ import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import com.khiemle.wmovies.R
+import com.khiemle.wmovies.presentation.screens.CastsAndCrewsFragment
 import com.khiemle.wmovies.presentation.screens.MovieDetailsFragment
 import com.khiemle.wmovies.presentation.screens.NowPlayingFragment
 import com.khiemle.wmovies.presentation.screens.TopRatedFragment
@@ -86,6 +87,14 @@ class HomeActivity : AppCompatActivity() {
         bundle.putLong(MovieDetailsFragment.ARG_MOVIE_ID, id)
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.frameContent, fragment).addToBackStack(MovieDetailsFragment::class.simpleName).commit()
+    }
+
+    fun openListContributors(id: Long) {
+        val fragment = CastsAndCrewsFragment()
+        val bundle = Bundle()
+        bundle.putLong(CastsAndCrewsFragment.ARG_MOVIE_ID, id)
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.frameContent, fragment).addToBackStack(CastsAndCrewsFragment::class.java.simpleName).commit()
     }
 
     fun showBottomNavigation(showed: Boolean) {

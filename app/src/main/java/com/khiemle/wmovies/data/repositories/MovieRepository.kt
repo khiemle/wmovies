@@ -3,6 +3,7 @@ package com.khiemle.wmovies.data.repositories
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.khiemle.wmovies.data.models.Configuration
+import com.khiemle.wmovies.data.models.Contributor
 import com.khiemle.wmovies.data.models.Movie
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -33,6 +34,15 @@ class MovieRepository(retrofit: Retrofit, appDatabase: AppDatabase? = null) {
 
     fun getMovieCredits(id: Long): Observable<Credits> {
         return movieRemoteDataSource.getCredits(id)
+    }
+
+    fun getMovieContributors(id: Long): Observable<List<Contributor>> {
+        return movieRemoteDataSource.getCredits(id).flatMap {
+            var mutableList = mutableListOf<Contributor>()
+            it.cast?.let { list -> mutableList.addAll(list) }
+            it.crew?.let { list -> mutableList.addAll(list) }
+            return@flatMap Observable.just(mutableList)
+        }
     }
 
     fun getMoviesWithPaging(moviesListType: MoviesListType, boundaryCallback: PagedList.BoundaryCallback<Movie>): LiveData<PagedList<Movie>>? {

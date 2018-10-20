@@ -23,4 +23,9 @@ class MovieModule {
     @Singleton
     fun getMovieViewModelFactory(retrofit: Retrofit, configurationDomain: ConfigurationDomain) = MovieViewModel.Factory(retrofit, configurationDomain)
 
+
+    @Provides
+    @Singleton
+    fun getCastsAndCrewsViewModelFactory(retrofit: Retrofit, configurationDomain: ConfigurationDomain) = CastsAndCrewsViewModel.Factory(retrofit, configurationDomain)
+
 }

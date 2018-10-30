@@ -43,11 +43,18 @@ class CastsAndCrewsFragment: Fragment() {
         binding.rvContributors.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
         arguments?.getLong(ARG_MOVIE_ID)?.let {
+            castsAndCrewsViewModel.getMovie(it)
             castsAndCrewsViewModel.getListContributors(it)
+            castsAndCrewsViewModel.movie.observe(this, Observer {
+                it?.let {
+                    binding.tvMovieName.text = it.originalTitle
+                }
+            })
             castsAndCrewsViewModel.listContributors.observe(this, Observer {
                 it?.let {
                     adapter.submitList(it)
                     adapter.notifyDataSetChanged()
+                    binding.tvCount.text = "${it.size} ${getString(R.string.people)}"
                 }
             })
         }

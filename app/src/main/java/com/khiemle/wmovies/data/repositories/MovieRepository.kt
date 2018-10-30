@@ -28,6 +28,10 @@ class MovieRepository(retrofit: Retrofit, appDatabase: AppDatabase? = null) {
         }
     }
 
+    fun getMovie(movieId: Long) : Observable<Movie> {
+        return movieLocalDataSource.getMovie(movieId)
+    }
+
     fun getMovieDetails(id: Long) : Observable<Movie> {
         return movieRemoteDataSource.getMovie(id)
     }

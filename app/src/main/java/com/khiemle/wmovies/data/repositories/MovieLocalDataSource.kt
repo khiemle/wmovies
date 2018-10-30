@@ -64,7 +64,7 @@ class MovieLocalDataSource(appDatabase: AppDatabase?) : MovieDataSource() {
         movieDAO?.findById(id)?.let {
             return it
         }
-        return Observable.just(null)
+        return Observable.just(Movie())
     }
 
     fun insertAll(movies: List<Movie>) {

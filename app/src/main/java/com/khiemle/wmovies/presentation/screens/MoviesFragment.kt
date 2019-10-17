@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.RequestManager
 import com.khiemle.wmovies.databinding.FragmentMoviesBinding
 import com.khiemle.wmovies.R
-import com.khiemle.wmovies.data.repositories.MoviesListType
 import com.khiemle.wmovies.data.repositories.RequestStatus
 import com.khiemle.wmovies.domains.ConfigurationDomain
 import com.khiemle.wmovies.presentation.HomeActivity
@@ -41,7 +38,7 @@ abstract class MoviesFragment: Fragment(), MoviesAdapter.OnItemClickListener, Sw
 
     abstract fun createViewModel() : MoviesViewModel
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -92,7 +89,7 @@ abstract class MoviesFragment: Fragment(), MoviesAdapter.OnItemClickListener, Sw
 
     override fun onRefresh() {
         if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected) {
-            moviesViewModel.clearAndReload(MoviesListType.TOP_RATED)
+            moviesViewModel.clearAndReload()
         } else {
             binding.swipeContainer.isRefreshing = false
         }

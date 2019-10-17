@@ -11,7 +11,7 @@ class NowPlayingFragment: MoviesFragment(){
     @Inject lateinit var moviesModelFactory: MoviesViewModel.NowPlayingFactory
     override fun createViewModel(): MoviesViewModel = ViewModelProviders.of(this, moviesModelFactory).get(MoviesViewModel::class.java)
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
     }

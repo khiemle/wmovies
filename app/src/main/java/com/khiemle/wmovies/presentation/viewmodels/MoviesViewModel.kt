@@ -57,7 +57,7 @@ class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val
         status.set(Result(RequestStatus.LOADING, null))
         compositeDisposable += movieRepository.getMovies(page, moviesListType)
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<List<Movie>>() {
                     override fun onComplete() {
                         isLoading.set(false)
@@ -81,7 +81,7 @@ class MoviesViewModel(retrofit: Retrofit, appDatabase: AppDatabase?, private val
         }
     }
 
-    fun clearAndReload(type: MoviesListType) {
+    fun clearAndReload() {
         compositeDisposable += movieRepository.clearLocalDataSource(moviesListType)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

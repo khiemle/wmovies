@@ -71,3 +71,24 @@ dependencies {
     implementation("androidx.paging:paging-rxjava2:2.1.0")
 
 }
+
+tasks.register("intro") {
+    doLast {
+        println("This is Wmovies")
+    }
+}
+
+tasks.register("printAppHelloWorld") {
+    dependsOn("intro")
+    doLast {
+        println("Hello World from App")
+    }
+}
+
+repeat(4) {
+    tasks.register("task$it") {
+        doLast {
+            println("I'm task number $it")
+        }
+    }
+}

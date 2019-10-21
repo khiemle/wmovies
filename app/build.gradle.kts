@@ -1,12 +1,15 @@
+import com.khiemle.builder.AndroidSDK
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("com.khiemle.builder")
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(AndroidSDK.compileSdk)
     dataBinding {
         isEnabled = true
     }
@@ -14,8 +17,8 @@ android {
         multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
         applicationId = "com.khiemle.wmovies"
-        minSdkVersion(16)
-        targetSdkVersion(28)
+        minSdkVersion(AndroidSDK.minSdk)
+        targetSdkVersion(AndroidSDK.targetSdk)
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -30,45 +33,46 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
-    implementation("androidx.vectordrawable:vectordrawable:1.1.0")
-    testImplementation("junit:junit:4.12")
-    androidTestImplementation("androidx.test:runner:1.3.0-alpha02")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0-alpha02")
+    implementation(Libs.Kotlin.stdlibJDK7)
+    implementation(Libs.Kotlin.reflect)
+    implementation(Libs.AndroidJetPack.AndroidX.AppCompat.appCompat)
+    implementation(Libs.Google.Material.material)
+    implementation(Libs.AndroidJetPack.AndroidX.ConstraintLayout.constraintLayout)
+    implementation(Libs.AndroidJetPack.AndroidX.VectorDrawable.vectorDrawable)
+    testImplementation(Libs.Test.JUnit.junit)
+    androidTestImplementation(Libs.Test.Android.AndroidX.Runner.runner)
+    androidTestImplementation(Libs.Test.Android.AndroidX.Espresso.core)
 
-    implementation("androidx.recyclerview:recyclerview:1.0.0")
+    implementation(Libs.AndroidJetPack.AndroidX.RecyclerView.recyclerView)
 
-    implementation("io.reactivex.rxjava2:rxjava:2.2.1")
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
+    implementation(Libs.ReactiveX.RxJava2.rxJava)
+    implementation(Libs.ReactiveX.RxJava2.rxAndroid)
 
-    implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
-    implementation("com.squareup.retrofit2:retrofit:2.5.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.4.0")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
+    implementation(Libs.Network.OkHttp3.loggingInterceptor)
+    implementation(Libs.Network.Retrofit2.retrofit)
+    implementation(Libs.Network.Retrofit2.convertGson)
+    implementation(Libs.Network.Retrofit2.Adapter.rxJava2)
 
-    implementation("androidx.lifecycle:lifecycle-runtime:2.1.0")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
-    kapt("androidx.lifecycle:lifecycle-compiler:2.1.0")
+    implementation(Libs.AndroidJetPack.AndroidX.LifeCycle.runtime)
+    implementation(Libs.AndroidJetPack.AndroidX.LifeCycle.extension)
+    kapt(Libs.AndroidJetPack.AndroidX.LifeCycle.compiler)
 
-    implementation("com.google.dagger:dagger:2.16")
-    implementation("com.google.dagger:dagger-android:2.16")
-    implementation("com.google.dagger:dagger-android-support:2.16")
-    kapt("com.google.dagger:dagger-compiler:2.16")
-    kapt("com.google.dagger:dagger-android-processor:2.16")
+    implementation(Libs.Google.Dagger.dagger)
+    implementation(Libs.Google.Dagger.daggerAndroid)
+    implementation(Libs.Google.Dagger.daggerAndroidSupport)
 
-    implementation("com.github.bumptech.glide:glide:4.8.0")
-    kapt("com.github.bumptech.glide:compiler:4.7.1")
+    kapt(Libs.Google.Dagger.daggerCompiler)
+    kapt(Libs.Google.Dagger.daggerAndroidProcessor)
 
-    implementation("androidx.room:room-runtime:2.2.0")
-    kapt("androidx.room:room-compiler:2.2.0")
-    implementation("androidx.room:room-rxjava2:2.2.0")
+    implementation(Libs.Glide.glide)
+    kapt(Libs.Glide.compiler)
 
-    implementation("androidx.paging:paging-runtime:2.1.0")
-    implementation("androidx.paging:paging-rxjava2:2.1.0")
+    implementation(Libs.AndroidJetPack.AndroidX.Room.runtime)
+    kapt(Libs.AndroidJetPack.AndroidX.Room.compiler)
+    implementation(Libs.AndroidJetPack.AndroidX.Room.rxJava2)
+
+    implementation(Libs.AndroidJetPack.AndroidX.Paging.runtime)
+    implementation(Libs.AndroidJetPack.AndroidX.Paging.rxJava2)
 
 }
 

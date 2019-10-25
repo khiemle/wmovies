@@ -1,4 +1,7 @@
 import com.khiemle.builder.AndroidSDK
+import com.khiemle.builder.BuidlerCustomTasks
+import com.khiemle.builder.BuilderPlugin
+import com.khiemle.builder.MoviesExtension
 
 plugins {
     id("com.android.application")
@@ -6,6 +9,12 @@ plugins {
     kotlin("android.extensions")
     kotlin("kapt")
     id("com.khiemle.builder")
+}
+
+
+configure<MoviesExtension> {
+    applicationId = "com.khiemle.auto"
+    name = "Auto Create Movie"
 }
 
 android {
@@ -29,7 +38,57 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
+    flavorDimensions("channel")
+    productFlavors {
+//        create("full") {
+//            applicationIdSuffix = ".full"
+//            versionNameSuffix = "-full"
+//            setDimension("version")
+//        }
+//        create("demo") {
+//            applicationIdSuffix = ".demo"
+//            versionNameSuffix = "-demo"
+//            setDimension("version")
+//        }
+//        create("wizemovie") {
+//            setDimension("channel")
+//            applicationId = "com.khiemle.wizemovie"
+//        }
+    }
+    run {
+//        android.productFlavors.register("lite") {
+//            this.setDimension("version")
+//            this.applicationIdSuffix = ".lite"
+//            this.versionNameSuffix = "-lite"
+//        }
+//        android.productFlavors.register("auto") {
+//            this.setDimension("channel")
+//        }
+        android.productFlavors.forEach {
+            println(it?.name)
+        }
+
+        val builder = plugins.getPlugin(BuilderPlugin::class)
+
+        builder.let {
+            builder.listApps.forEach {config ->
+                config.name?.let { name ->
+                    android.productFlavors.register(name) {
+                        this.setDimension("channel")
+                        config.applicationId?.let {appId ->
+                            applicationId = appId
+                        }
+                        resValue("string", "gen_app_name", name)
+                    }
+                }
+
+            }
+
+        }
+
+    }
 }
+
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
@@ -79,6 +138,7 @@ dependencies {
 tasks.register("intro") {
     doLast {
         println("This is Wmovies")
+
     }
 }
 
@@ -87,6 +147,17 @@ tasks.register("printAppHelloWorld") {
     doLast {
         println("Hello World from App")
     }
+}
+
+tasks.register("createNewFlavors") {
+    doFirst {
+        println("doFirstOfTask")
+    }
+
+    doLast {
+        println("doLastOfTask")
+    }
+
 }
 
 repeat(4) {

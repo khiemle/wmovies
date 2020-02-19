@@ -99,6 +99,7 @@ dependencies {
     implementation(Libs.AndroidJetPack.AndroidX.ConstraintLayout.constraintLayout)
     implementation(Libs.AndroidJetPack.AndroidX.VectorDrawable.vectorDrawable)
     testImplementation(Libs.Test.JUnit.junit)
+    testImplementation(Libs.Test.Mockito.mockito)
     androidTestImplementation(Libs.Test.Android.AndroidX.Runner.runner)
     androidTestImplementation(Libs.Test.Android.AndroidX.Espresso.core)
 

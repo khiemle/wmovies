@@ -44,6 +44,10 @@ object Libs {
             private const val version = "4.12"
             const val junit = "junit:junit:$version"
         }
+        object Mockito {
+            private const val version = "2.2.0"
+            const val mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:$version"
+        }
         object Android {
             object AndroidX {
                 object Runner {

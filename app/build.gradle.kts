@@ -101,6 +101,7 @@ dependencies {
     testImplementation(Libs.Test.JUnit.junit)
     testImplementation(Libs.Test.Mockito.mockito)
     androidTestImplementation(Libs.Test.Android.AndroidX.Runner.runner)
+    androidTestImplementation(Libs.Test.Android.AndroidX.Rules.rules)
     androidTestImplementation(Libs.Test.Android.AndroidX.Espresso.core)
 
     implementation(Libs.AndroidJetPack.AndroidX.RecyclerView.recyclerView)

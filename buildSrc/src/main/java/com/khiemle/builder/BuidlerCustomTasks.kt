@@ -16,6 +16,7 @@ open class BuidlerCustomTasks: DefaultTask() {
     @Internal
     val message: Provider<String> = greeting.map { it + "from Gradle" }
 
+    @Input
     var destination: Any? = null
     private fun getDestination() : File {
         return project.file(destination!!)

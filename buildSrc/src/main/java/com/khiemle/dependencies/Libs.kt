@@ -1,7 +1,7 @@
 object Libs {
 
     object Gradle {
-        private const val version = "3.5.1"
+        private const val version = "4.0.1"
         const val android = "com.android.tools.build:gradle:$version"
     }
 
